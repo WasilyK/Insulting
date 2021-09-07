@@ -9,20 +9,14 @@ import com.wasilyk.app.insulting.repository.local.LocalDataSource
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import moxy.InjectViewState
 import moxy.MvpPresenter
-import javax.inject.Inject
 
-@InjectViewState
-class InsultsListPresenter @Inject constructor() :
-    MvpPresenter<InsultsListView>() {
+class InsultsListPresenter(
+    private val localDataSource: LocalDataSource,
+    private val router: Router,
+    private val screens: Screens
+) : MvpPresenter<InsultsListView>() {
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-    @Inject
-    lateinit var router: Router
-    @Inject
-    lateinit var screens: Screens
     val adapterPresenter = InsultsListAdapterPresenterImpl()
     private val insults = mutableListOf<Insult>()
     private val disposables: CompositeDisposable = CompositeDisposable()

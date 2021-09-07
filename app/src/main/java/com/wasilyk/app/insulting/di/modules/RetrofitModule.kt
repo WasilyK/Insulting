@@ -24,6 +24,7 @@ class RetrofitModule {
     fun provideGson(): Gson = GsonBuilder().create()
 
     @Provides
+    @Singleton
     fun provideInsultApi(@Url url: String, gson: Gson): InsultApi = Retrofit.Builder()
         .baseUrl(url)
         .client(OkHttpClient.Builder().build())

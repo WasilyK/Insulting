@@ -1,27 +1,24 @@
 package com.wasilyk.app.insulting.mvp.presenters
 
 import com.github.terrakok.cicerone.Router
-import com.wasilyk.app.insulting.app.App
 import com.wasilyk.app.insulting.mvp.models.Insult
 import com.wasilyk.app.insulting.mvp.views.InsultGenView
 import com.wasilyk.app.insulting.mvp.views.screens.Screens
 import com.wasilyk.app.insulting.repository.local.room.InsultsDao
 import com.wasilyk.app.insulting.repository.remote.RemoteDataSource
-import com.wasilyk.app.insulting.repository.remote.RemoteDataSourceImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import moxy.InjectViewState
 import moxy.MvpPresenter
-import javax.inject.Inject
 
-@InjectViewState
-class InsultGenPresenter @Inject constructor() : MvpPresenter<InsultGenView>() {
-    private val router: Router = App.instance.appComponent.getRouter()
-    private val screens: Screens = App.instance.appComponent.getScreens()
-    private val remoteDataSource: RemoteDataSource = RemoteDataSourceImpl()
-    private val insultsDao: InsultsDao = App.instance.appComponent.getInsultsDao()
-    private lateinit var insult: Insult
+class InsultGenPresenter (
+    private val router: Router,
+    private val screens: Screens,
+    private val remoteDataSource: RemoteDataSource,
+    private val insultsDao: InsultsDao
+) : MvpPresenter<InsultGenView>() {
+
+    private var insult = Insult(-1, "Unknown", "Unknown", -1)
     private val compositeDisposable = CompositeDisposable()
 
     override fun onFirstViewAttach() {

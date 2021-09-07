@@ -1,21 +1,24 @@
 package com.wasilyk.app.insulting.app
 
-import android.app.Application
-import com.wasilyk.app.insulting.di.components.AppComponent
+import com.github.terrakok.cicerone.Cicerone
 import com.wasilyk.app.insulting.di.components.DaggerAppComponent
+import com.wasilyk.app.insulting.mvp.views.screens.ScreensImpl
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class App : Application() {
-    lateinit var appComponent: AppComponent
+class App : DaggerApplication() {
 
-    companion object {
-        lateinit var instance: App
-    }
+    override fun applicationInjector(): AndroidInjector<App> {
+        val cicerone = Cicerone.create()
 
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-        appComponent = DaggerAppComponent
+        return DaggerAppComponent
             .factory()
-            .create(this)
+            .create(
+                applicationContext,
+                cicerone.router,
+                cicerone.getNavigatorHolder(),
+                ScreensImpl()
+            )
     }
+
 }

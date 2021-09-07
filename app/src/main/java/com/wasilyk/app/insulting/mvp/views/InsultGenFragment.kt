@@ -6,17 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.wasilyk.app.insulting.app.App
+import com.github.terrakok.cicerone.Router
 import com.wasilyk.app.insulting.databinding.FragmentGenBinding
 import com.wasilyk.app.insulting.mvp.models.Insult
-import moxy.MvpAppCompatFragment
+import com.wasilyk.app.insulting.mvp.presenters.InsultGenPresenter
+import com.wasilyk.app.insulting.mvp.views.screens.Screens
+import com.wasilyk.app.insulting.repository.local.room.InsultsDao
+import com.wasilyk.app.insulting.repository.remote.RemoteDataSource
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class InsultGenFragment() : MvpAppCompatFragment(), InsultGenView {
+class InsultGenFragment() : MoxyDaggerBaseFragment(), InsultGenView {
 
-    private lateinit var viewBinding: FragmentGenBinding
+    private var viewBinding: FragmentGenBinding? = null
+    @Inject lateinit var router: Router
+    @Inject lateinit var screens: Screens
+    @Inject lateinit var remoteDataSource: RemoteDataSource
+    @Inject lateinit var insultsDao: InsultsDao
+
     private val insultGenPresenter by moxyPresenter {
-        App.instance.appComponent.getInsultGenPresenter()
+        InsultGenPresenter(
+            router,
+            screens,
+            remoteDataSource,
+            insultsDao
+        )
     }
 
     companion object {
@@ -25,24 +39,24 @@ class InsultGenFragment() : MvpAppCompatFragment(), InsultGenView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentGenBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        return viewBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.backBtn.setOnClickListener {
+        viewBinding?.backBtn?.setOnClickListener {
             insultGenPresenter.startListGFragment()
         }
-        viewBinding.nextBtn.setOnClickListener {
+        viewBinding?.nextBtn?.setOnClickListener {
             insultGenPresenter.loadInsult()
         }
-        viewBinding.saveBtn.setOnClickListener {
+        viewBinding?.saveBtn?.setOnClickListener {
             insultGenPresenter.saveInsult()
         }
     }
 
     override fun setInsult(insult: Insult) {
-        viewBinding.insultTv.text = insult.text
+        viewBinding?.insultTv?.text = insult.text
     }
 
     override fun showToast(message: String) {
