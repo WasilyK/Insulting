@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Insulting</string>
+    <string name="insult_generate">INSULT GENERATE</string>
+    <string name="back_btn_title">Back</string>
+    <string name="save_btn_title">Save</string>
+    <string name="next_btn_title">next</string>
 </resources>
