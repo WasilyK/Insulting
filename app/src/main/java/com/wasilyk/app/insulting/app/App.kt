@@ -7,18 +7,14 @@ import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 
 class App : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<App> {
-        val cicerone = Cicerone.create()
-
-        return DaggerAppComponent
-            .factory()
-            .create(
-                applicationContext,
-                cicerone.router,
-                cicerone.getNavigatorHolder(),
-                ScreensImpl()
-            )
-    }
-
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerAppComponent.builder()
+            .withContext(applicationContext)
+            .apply {
+                val cicerone = Cicerone.create()
+                withRouter(cicerone.router)
+                withNavigatorHolder(cicerone.getNavigatorHolder())
+            }
+            .withScreens(ScreensImpl())
+            .build()
 }

@@ -8,26 +8,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.terrakok.cicerone.Router
 import com.wasilyk.app.insulting.databinding.FragmentListBinding
+import com.wasilyk.app.insulting.di.factories.InsultsListPresenterFactory
 import com.wasilyk.app.insulting.mvp.presenters.InsultsListPresenter
-import com.wasilyk.app.insulting.mvp.views.screens.Screens
-import com.wasilyk.app.insulting.repository.local.LocalDataSource
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 class InsultsListFragment : MoxyDaggerBaseFragment(), InsultsListView {
 
-    @Inject lateinit var localDataSource: LocalDataSource
-    @Inject lateinit var router: Router
-    @Inject lateinit var screens: Screens
+    @Inject lateinit var insultsListPresenterFactory: InsultsListPresenterFactory
 
     private val insultsListPresenter: InsultsListPresenter by moxyPresenter {
-        InsultsListPresenter(
-            localDataSource,
-            router,
-            screens
-        )
+        insultsListPresenterFactory.create()
     }
     private var viewBinding: FragmentListBinding? = null
     private var insultsAdapter: InsultsListAdapter? = null
