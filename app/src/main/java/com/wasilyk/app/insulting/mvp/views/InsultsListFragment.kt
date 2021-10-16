@@ -8,19 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wasilyk.app.insulting.app.App
 import com.wasilyk.app.insulting.databinding.FragmentListBinding
+import com.wasilyk.app.insulting.di.factories.InsultsListPresenterFactory
 import com.wasilyk.app.insulting.mvp.presenters.InsultsListPresenter
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class InsultsListFragment : MvpAppCompatFragment(), InsultsListView {
+class InsultsListFragment : MoxyDaggerBaseFragment(), InsultsListView {
+
+    @Inject lateinit var insultsListPresenterFactory: InsultsListPresenterFactory
 
     private val insultsListPresenter: InsultsListPresenter by moxyPresenter {
-        App.instance.appComponent.getInsultsListPresenter()
+        insultsListPresenterFactory.create()
     }
-    private lateinit var viewBinding: FragmentListBinding
-    private lateinit var insultsAdapter: InsultsListAdapter
+    private var viewBinding: FragmentListBinding? = null
+    private var insultsAdapter: InsultsListAdapter? = null
 
     companion object {
         fun newInstance(): Fragment = InsultsListFragment()
@@ -28,19 +30,19 @@ class InsultsListFragment : MvpAppCompatFragment(), InsultsListView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewBinding = FragmentListBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        return viewBinding?.root as View
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.insultGenBtn.setOnClickListener {
+        viewBinding?.insultGenBtn?.setOnClickListener {
             insultsListPresenter.startGenFragment()
         }
     }
 
     override fun init() {
         insultsAdapter = InsultsListAdapter(insultsListPresenter.adapterPresenter)
-        viewBinding.recyclerView.apply {
+        viewBinding?.recyclerView?.apply {
             this.adapter = insultsAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -48,7 +50,7 @@ class InsultsListFragment : MvpAppCompatFragment(), InsultsListView {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun updateInsultsList() {
-        insultsAdapter.notifyDataSetChanged()
+        insultsAdapter?.notifyDataSetChanged()
     }
 
     override fun showToast(message: String) {

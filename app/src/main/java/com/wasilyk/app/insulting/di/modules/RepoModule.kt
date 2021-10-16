@@ -2,12 +2,17 @@ package com.wasilyk.app.insulting.di.modules
 
 import com.wasilyk.app.insulting.repository.local.LocalDataSource
 import com.wasilyk.app.insulting.repository.local.LocalDataSourceImpl
+import com.wasilyk.app.insulting.repository.remote.RemoteDataSource
+import com.wasilyk.app.insulting.repository.remote.RemoteDataSourceImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 @Module
-class RepoModule {
+interface RepoModule {
 
-    @Provides
-    fun provideLocalDataSource(): LocalDataSource = LocalDataSourceImpl()
+    @Binds
+    fun bindLocalDataSource(localDataSource: LocalDataSourceImpl): LocalDataSource
+
+    @Binds
+    fun bindRemoteDataSource(remoteDataSource: RemoteDataSourceImpl): RemoteDataSource
 }

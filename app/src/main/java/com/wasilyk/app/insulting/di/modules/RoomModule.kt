@@ -6,6 +6,7 @@ import com.wasilyk.app.insulting.repository.local.room.InsultsDao
 import com.wasilyk.app.insulting.repository.local.room.InsultsDataBase
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import javax.inject.Singleton
 
 @Module
@@ -17,7 +18,7 @@ class RoomModule {
     fun provideDatabase(context: Context): InsultsDataBase =
         Room.databaseBuilder(context, InsultsDataBase::class.java, dbName).build()
 
-    @Singleton
+    @Reusable
     @Provides
     fun provideInsultsDao(db: InsultsDataBase): InsultsDao = db.getInsultsDao()
 }
