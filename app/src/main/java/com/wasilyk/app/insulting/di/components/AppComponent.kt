@@ -24,13 +24,12 @@ import javax.inject.Singleton
     RoomModule::class]
 )
 interface AppComponent : AndroidInjector<App> {
-    @Component.Factory
-    interface Factory {
-        fun create(
-            @BindsInstance context: Context,
-            @BindsInstance router: Router,
-            @BindsInstance navigatorHolder: NavigatorHolder,
-            @BindsInstance screens: Screens
-        ): AppComponent
+    @Component.Builder
+    interface Builder {
+        fun withContext(@BindsInstance context: Context): Builder
+        fun withRouter(@BindsInstance router: Router): Builder
+        fun withNavigatorHolder(@BindsInstance navigatorHolder: NavigatorHolder): Builder
+        fun withScreens(@BindsInstance screens: Screens): Builder
+        fun build(): AppComponent
     }
 }

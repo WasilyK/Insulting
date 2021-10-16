@@ -6,12 +6,13 @@ import com.wasilyk.app.insulting.mvp.views.InsultsListView
 import com.wasilyk.app.insulting.mvp.views.ItemView
 import com.wasilyk.app.insulting.mvp.views.screens.Screens
 import com.wasilyk.app.insulting.repository.local.LocalDataSource
+import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
 
-class InsultsListPresenter(
+class InsultsListPresenter @AssistedInject constructor(
     private val localDataSource: LocalDataSource,
     private val router: Router,
     private val screens: Screens
